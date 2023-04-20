@@ -1,7 +1,3 @@
-<script>
-	console.log(Promise.race([]), Promise.race, [].flat);
-</script>
-
 <svelte:head>
 	<title>Template</title>
 	<meta name="description" content="Svelte template" />
