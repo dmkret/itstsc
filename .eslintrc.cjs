@@ -7,7 +7,7 @@ module.exports = {
 		'prettier',
 		'plugin:compat/recommended',
 	],
-	plugins: ['svelte3', '@typescript-eslint', 'compat'],
+	plugins: ['svelte3', '@typescript-eslint', 'compat', 'import'],
 	ignorePatterns: ['*.cjs'],
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
 	settings: {
@@ -22,5 +22,28 @@ module.exports = {
 		browser: true,
 		es2017: true,
 		node: true,
+	},
+	rules: {
+		'import/extensions': 'off',
+		'import/order': [
+			'warn',
+			{
+				alphabetize: { order: 'asc' },
+				pathGroups: [
+					{
+						pattern: '$+(app|env)/**',
+						group: 'internal',
+						position: 'before',
+					},
+					{
+						pattern: '$lib/**',
+						group: 'internal',
+						position: 'after',
+					},
+				],
+				groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],
+				'newlines-between': 'always',
+			},
+		],
 	},
 };

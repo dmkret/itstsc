@@ -1,5 +1,6 @@
-import adapter from '@sveltejs/adapter-static';
 import babelPresetEnv from '@babel/preset-env';
+import adapter from '@sveltejs/adapter-static';
+import postcssPresetEnv from 'postcss-preset-env';
 import preprocess from 'svelte-preprocess';
 
 const projectName = process.env.GITHUB_REPOSITORY?.split('/')[0];
@@ -7,6 +8,9 @@ const projectName = process.env.GITHUB_REPOSITORY?.split('/')[0];
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: preprocess({
+		postcss: {
+			plugins: [postcssPresetEnv()],
+		},
 		babel: {
 			presets: [
 				[
@@ -26,7 +30,9 @@ const config = {
 	}),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: '404.html',
+		}),
 		paths: {
 			base: projectName ? `/${projectName}` : undefined,
 		},
