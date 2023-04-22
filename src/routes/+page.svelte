@@ -1,75 +1,77 @@
 <script lang="ts">
-	import { db } from '$lib/database';
+	import { costs } from '$lib/stores';
+	import { base } from '$app/paths';
 
-	import { onMount } from 'svelte';
-
-	let initialized = false;
-
-	let list: any[] = [];
-
-	let newValue: string | null = null;
-
-	async function handleAdd() {
-		if (newValue === null) return;
-
-		const numberValue = parseFloat(newValue);
-		if (Number.isNaN(numberValue)) return;
-
-		const item = await db.add({ value: numberValue });
-		newValue = null;
-		list = [item, ...list];
-	}
-
-	onMount(() => {
-		db.init()
-			.then(db.list)
-			.then((result) => {
-				list = result;
-				initialized = true;
-			});
-	});
+	$: total = $costs.reduce((acc, i) => acc + i.value, 0);
 </script>
 
-<svelte:head>
-	<title>Деняк.net</title>
-	<meta name="description" content="Деняк.net" />
-</svelte:head>
+<section>
+	<div class="total">
+		<span>Всего</span>
+		<span>{total}</span>
+	</div>
 
-{#if initialized}
-	<main>
-		<form class="add" on:submit|preventDefault={handleAdd}>
-			<input type="string" placeholder="Сумма расхода" bind:value={newValue} />
-			<button>Добавить</button>
-		</form>
+	<div class="list">
+		{#each $costs as item, index (item.id)}
+			{@const prev = $costs[index - 1]}
+			{@const dateString = item.createdAt.toLocaleDateString()}
+			{@const prevDateString = prev?.createdAt.toLocaleDateString()}
 
-		<div class="list">
-			{#each list as item (item.id)}
-				<div class="item">{JSON.stringify(item)}</div>
-			{/each}
-		</div>
-	</main>
-{/if}
+			{#if prevDateString !== dateString}
+				<div class="date">{dateString}</div>
+				<div />
+			{/if}
+
+			<span> {item.title} </span>
+			<span class="value"> {item.value} </span>
+		{/each}
+	</div>
+
+	<a href="{base}/add">
+		<button class="add">+</button>
+	</a>
+</section>
 
 <style lang="scss">
-	main {
+	section {
 		display: grid;
-		justify-items: stretch;
-
-		width: 100%;
-		margin: auto;
-		max-width: 800px;
-
 		row-gap: 16px;
+		padding-bottom: 64px;
+
+		height: 100%;
+		align-content: flex-start;
 	}
 
-	.add {
+	.total {
+		font-size: 24px;
+		font-weight: 700;
 		display: grid;
-		column-gap: 8px;
 		grid-template-columns: 1fr auto;
 	}
 
 	.list {
 		row-gap: 8px;
 		display: grid;
+
+		height: 100%;
+		align-content: flex-start;
+
+		grid-template-columns: 1fr auto;
+
+		.value {
+			text-align: right;
+		}
+
+		.date {
+			font-weight: 700;
+		}
+	}
+
+	.add {
+		position: fixed;
+		bottom: 0;
+		height: 48px;
+		width: 100%;
+		max-width: var(--max-with);
 	}
 </style>
