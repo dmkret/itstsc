@@ -1,6 +1,6 @@
 import { categories, costs } from './stores';
 
-const DB_NAME = 'database';
+const DB_NAME = 'databasev2';
 const COSTS_STORE_NAME = 'costs';
 const CATEGORIES_STORE_NAME = 'categories';
 const DATE_INDEX = 'date_idx';

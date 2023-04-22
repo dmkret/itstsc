@@ -23,7 +23,12 @@
 		if (Number.isNaN(Date.parse(date))) return;
 		const parsedDate = new Date(date);
 
-		await db.addCost({ createdAt: parsedDate, value: floatValue, title });
+		await db.addCost({
+			createdAt: parsedDate,
+			value: floatValue,
+			title,
+			categories: categories.map((c) => c.id),
+		});
 		goto(base || '/');
 	}
 </script>

@@ -74,7 +74,6 @@
 
 			<div class="filter">
 				<input bind:value={search} placeholder="Поиск" />
-				<button>Поиск</button>
 			</div>
 			{#if filteredCategories.length === 0}
 				<button class="create" on:click={handleCategoryAdd}>Создать</button>
@@ -158,7 +157,6 @@
 
 		.filter {
 			display: grid;
-			grid-template-columns: 1fr auto;
 
 			input {
 				border: none;

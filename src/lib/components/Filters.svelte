@@ -4,6 +4,13 @@
 
 	let from: string;
 	let to: string;
+	let categories: Category[] = [];
+
+	$: categories, handleCategoriesChange();
+
+	function handleCategoriesChange() {
+		$filters.categories = categories.map((c) => c.id);
+	}
 
 	function handleFromChange() {
 		if (Number.isNaN(Date.parse(from))) return;
@@ -21,7 +28,7 @@
 <div class="filters">
 	<input type="date" bind:value={from} on:input={handleFromChange} />
 	<input type="date" bind:value={to} on:input={handleToChange} />
-	<Categories direction="down" />
+	<Categories direction="down" bind:selected={categories} />
 </div>
 
 <style lang="scss">

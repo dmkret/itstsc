@@ -26,6 +26,14 @@ export const filteredCosts = derived([costs, filters], ([$costs, $filters]) => {
 			return false;
 		}
 
-		return true;
+		if ($filters.categories.length === 0) {
+			return true;
+		}
+
+		if (cost.categories.some((category) => $filters.categories.includes(category))) {
+			return true;
+		}
+
+		return false;
 	});
 });
