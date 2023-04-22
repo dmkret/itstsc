@@ -1,0 +1,9 @@
+{
+	"short_name": "Денег.net",
+	"name": "Денег.net",
+	"description": "Если денег больше нет, юзай денег.net",
+	"start_url": "/itstsc",
+	"background_color": "#ffffff",
+	"display": "standalone",
+	"theme_color": "#ffffff"
+}

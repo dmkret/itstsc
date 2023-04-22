@@ -6,7 +6,7 @@
 	let canvas: HTMLCanvasElement;
 	let chart: Chart<'doughnut', number[], any> | null;
 
-	$: categoriesMap = $filteredCosts.reduce((acc, item) => {
+	$: costsPerCategoryMap = $filteredCosts.reduce((acc, item) => {
 		for (const categoryId of item.categories) {
 			const total = acc.get(categoryId);
 			if (total !== undefined) {
@@ -19,13 +19,13 @@
 		return acc;
 	}, new Map<number, number>());
 
-	$: categoriesMap, updateChartData();
+	$: costsPerCategoryMap, updateChartData();
 
 	function getChartData() {
 		const labels: string[] = [];
 		const values: number[] = [];
 
-		for (const [k, v] of categoriesMap.entries()) {
+		for (const [k, v] of costsPerCategoryMap.entries()) {
 			labels.push($categories.find((category) => category.id === k)?.title ?? '');
 			values.push(v);
 		}
