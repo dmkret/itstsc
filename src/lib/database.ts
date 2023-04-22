@@ -71,9 +71,9 @@ class Database {
 		const store = transaction.objectStore(COSTS_STORE_NAME);
 		const request = store.index(DATE_INDEX).openCursor(null, 'prev');
 
-		const entries: any[] = [];
+		const entries: Cost[] = [];
 
-		return new Promise<any[]>((resolve, reject) => {
+		return new Promise<typeof entries>((resolve, reject) => {
 			request.addEventListener('success', () => {
 				const cursor = request.result;
 				if (cursor) {
@@ -95,9 +95,9 @@ class Database {
 		const store = transaction.objectStore(CATEGORIES_STORE_NAME);
 		const request = store.index(DATE_INDEX).openCursor(null, 'prev');
 
-		const entries: any[] = [];
+		const entries: Category[] = [];
 
-		return new Promise<any[]>((resolve, reject) => {
+		return new Promise<typeof entries>((resolve, reject) => {
 			request.addEventListener('success', () => {
 				const cursor = request.result;
 				if (cursor) {
@@ -112,41 +112,50 @@ class Database {
 		});
 	};
 
-	addCost = async (cost: any) => {
+	addCost = async (cost: Omit<Cost, 'id'>) => {
 		if (!this.db) return;
 
 		const transaction = this.db.transaction(COSTS_STORE_NAME, 'readwrite');
 		const storage = transaction.objectStore(COSTS_STORE_NAME);
 
-		delete cost.id;
 		const request = storage.add(cost);
 
 		return new Promise((resolve, reject) => {
 			request.addEventListener('success', () => {
-				cost.id = request.result;
-				costs.update(($costs) => [cost, ...$costs].sort((a, b) => b.createdAt - a.createdAt));
+				const completeCose = {
+					...cost,
+					id: request.result as number,
+				};
 
-				resolve(cost);
+				costs.update(($costs) =>
+					[completeCose, ...$costs].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
+				);
+
+				resolve(completeCose);
 			});
 			request.addEventListener('error', () => reject(request.error));
 		});
 	};
 
-	addCategory = async (category: any) => {
+	addCategory = async (category: Omit<Category, 'id' | 'createdAt'>) => {
 		if (!this.db) return;
 
 		const transaction = this.db.transaction(CATEGORIES_STORE_NAME, 'readwrite');
 		const storage = transaction.objectStore(CATEGORIES_STORE_NAME);
 
-		delete category.id;
-		category.createdAt = new Date();
-		const request = storage.add(category);
+		const newCategory = {
+			...category,
+			createdAt: new Date(),
+		};
+
+		const request = storage.add(newCategory);
 
 		return new Promise<Category>((resolve, reject) => {
 			request.addEventListener('success', () => {
-				category.id = request.result;
-				categories.update(($categories) => [category, ...$categories]);
-				resolve(category);
+				const completeCategory = { ...newCategory, id: request.result as number };
+				categories.update(($categories) => [completeCategory, ...$categories]);
+
+				resolve(completeCategory);
 			});
 			request.addEventListener('error', () => reject(request.error));
 		});
