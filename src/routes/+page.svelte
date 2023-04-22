@@ -2,6 +2,7 @@
 	import { filteredCosts } from '$lib/stores';
 	import { base } from '$app/paths';
 	import Filters from '$lib/components/Filters.svelte';
+	import Chart from '$lib/components/Chart.svelte';
 
 	$: total = $filteredCosts.reduce((acc, i) => acc + i.value, 0);
 </script>
@@ -13,6 +14,8 @@
 		<span>Потрачено</span>
 		<span>{total}</span>
 	</div>
+
+	<Chart />
 
 	<div class="list">
 		{#each $filteredCosts as item, index (item.id)}

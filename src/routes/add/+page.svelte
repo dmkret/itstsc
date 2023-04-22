@@ -33,6 +33,10 @@
 	}
 </script>
 
+<a href={base || '/'}>
+	<button>Назад</button>
+</a>
+
 <form>
 	<input type="date" bind:value={date} />
 	<Categories bind:selected={categories} withCreation />
