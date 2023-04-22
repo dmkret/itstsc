@@ -1,5 +1,7 @@
 import { derived, writable } from 'svelte/store';
 
+import { formatDate } from './util';
+
 export const categories = writable<Category[]>([]);
 export const costs = writable<Cost[]>([]);
 
@@ -10,12 +12,20 @@ export const filters = writable({
 });
 
 export const filteredCosts = derived([costs, filters], ([$costs, $filters]) => {
+	const from = $filters.from ? formatDate($filters.from) : '';
+	const to = $filters.to ? formatDate($filters.to) : '';
+
 	return $costs.filter((cost) => {
-		if ($filters.from && cost.createdAt < $filters.from) {
+		const formattedDate = formatDate(cost.createdAt);
+
+		if (from && from > formattedDate) {
 			return false;
 		}
-		if ($filters.to && cost.createdAt > $filters.to) {
+
+		if (to && to < formattedDate) {
 			return false;
 		}
+
+		return true;
 	});
 });

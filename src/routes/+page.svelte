@@ -1,19 +1,22 @@
 <script lang="ts">
-	import { costs } from '$lib/stores';
+	import { filteredCosts } from '$lib/stores';
 	import { base } from '$app/paths';
+	import Filters from '$lib/components/Filters.svelte';
 
-	$: total = $costs.reduce((acc, i) => acc + i.value, 0);
+	$: total = $filteredCosts.reduce((acc, i) => acc + i.value, 0);
 </script>
 
 <section>
+	<Filters />
+
 	<div class="total">
 		<span>Потрачено</span>
 		<span>{total}</span>
 	</div>
 
 	<div class="list">
-		{#each $costs as item, index (item.id)}
-			{@const prev = $costs[index - 1]}
+		{#each $filteredCosts as item, index (item.id)}
+			{@const prev = $filteredCosts[index - 1]}
 			{@const dateString = item.createdAt.toLocaleDateString()}
 			{@const prevDateString = prev?.createdAt.toLocaleDateString()}
 

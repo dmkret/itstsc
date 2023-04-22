@@ -3,13 +3,11 @@
 	import { base } from '$app/paths';
 	import { db } from '$lib/database';
 	import Categories from '$lib/components/Categories.svelte';
+	import { formatDate } from '$lib/util';
 
 	let now = new Date();
 	let categories: Category[] = [];
-	let date = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now
-		.getDate()
-		.toString()
-		.padStart(2, '0')}`;
+	let date = formatDate(now);
 	let value: string | null = null;
 	let title: string = '';
 

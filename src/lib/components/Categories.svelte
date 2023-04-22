@@ -4,6 +4,8 @@
 	import { categories } from '$lib/stores';
 
 	export let selected: Category[] = [];
+	export let direction: 'up' | 'down' = 'up';
+
 	let search = '';
 	let isSelectOpen = false;
 
@@ -47,7 +49,7 @@
 	}
 </script>
 
-<div class="select" use:clickOutside={handleClose}>
+<div class="categories" use:clickOutside={handleClose}>
 	<button class="value" on:click={toggleOpen} class:empty={selected.length === 0}>
 		{#if selected.length > 0}
 			{selected.map((c) => c.title).join(', ')}
@@ -57,7 +59,7 @@
 	</button>
 
 	{#if isSelectOpen}
-		<div class="dropdown">
+		<div class="dropdown" class:down={direction === 'down'}>
 			<div class="list">
 				{#each filteredCategories as category (category)}
 					<button
@@ -82,12 +84,10 @@
 </div>
 
 <style lang="scss">
-	.select {
+	.categories {
 		position: relative;
 		width: 100%;
 		cursor: pointer;
-
-		height: 48px;
 	}
 
 	input {
@@ -95,13 +95,12 @@
 	}
 
 	.value {
-		height: 100%;
 		border: 1px solid black;
 		text-align: left;
 		display: block;
 
 		width: 100%;
-		background: transparent;
+		background: white;
 	}
 	.value.empty {
 		color: gray;
@@ -119,6 +118,13 @@
 		border-bottom: none;
 
 		background: white;
+
+		&.down {
+			bottom: unset;
+			top: 100%;
+			border-top: none;
+			border-bottom: 1px solid black;
+		}
 
 		.list {
 			max-height: 200px;
