@@ -7,7 +7,7 @@
 
 <section>
 	<div class="total">
-		<span>Всего</span>
+		<span>Потрачено</span>
 		<span>{total}</span>
 	</div>
 
