@@ -45,6 +45,11 @@
 		align-content: flex-start;
 	}
 
+	.total,
+	.list {
+		padding: 0 8px;
+	}
+
 	.total {
 		font-size: 24px;
 		font-weight: 700;

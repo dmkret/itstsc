@@ -47,7 +47,7 @@
 
 		:global(input),
 		:global(button) {
-			height: 24px;
+			height: 32px;
 		}
 	}
 </style>
