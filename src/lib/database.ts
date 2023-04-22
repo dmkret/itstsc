@@ -1,6 +1,6 @@
 import { categories, costs } from './stores';
 
-const DB_NAME = 'databasev3';
+const DB_NAME = 'db';
 const COSTS_STORE_NAME = 'costs';
 const CATEGORIES_STORE_NAME = 'categories';
 const DATE_INDEX = 'date_idx';
@@ -26,9 +26,10 @@ class Database {
 		if (this.db) return;
 
 		await new Promise<IDBDatabase>((resolve, reject) => {
-			const request = indexedDB.open(DB_NAME, 2);
+			const request = indexedDB.open(DB_NAME, 1);
 			request.addEventListener('success', () => {
 				this.db = request.result;
+				console.log('here 1');
 				resolve(this.db);
 			});
 			request.addEventListener('error', () => {
@@ -45,21 +46,17 @@ class Database {
 				this.db = request.result;
 
 				switch (event.oldVersion) {
-					case 1: {
-						const storeObject = this.db.createObjectStore(COSTS_STORE_NAME, {
+					case 0: {
+						const costs = this.db.createObjectStore(COSTS_STORE_NAME, {
 							keyPath: 'id',
 							autoIncrement: true,
 						});
-						storeObject.createIndex(DATE_INDEX, 'createdAt');
-						break;
-					}
-					case 2: {
-						const storeObject = this.db.createObjectStore(CATEGORIES_STORE_NAME, {
+						costs.createIndex(DATE_INDEX, 'createdAt');
+						const categories = this.db.createObjectStore(CATEGORIES_STORE_NAME, {
 							keyPath: 'id',
 							autoIncrement: true,
 						});
-						storeObject.createIndex(DATE_INDEX, 'createdAt');
-						resolve(this.db);
+						categories.createIndex(DATE_INDEX, 'createdAt');
 						break;
 					}
 				}
