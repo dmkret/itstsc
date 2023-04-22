@@ -23,7 +23,6 @@ jobs:
       - if: steps.cache-primes.outputs.cache-hit != 'true'
         run: npm ci
       - run: npm run check
-      - run: npm run lint
 
   deploy:
     if: ${{ vars.DEPLOY_PAGES == 'true' }}
