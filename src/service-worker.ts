@@ -11,8 +11,6 @@ const CACHE = `cache-${version}`;
 const ASSETS = [...build, ...files];
 
 sw.addEventListener('install', (event) => {
-	sw.skipWaiting();
-
 	async function addFilesToCache() {
 		const cache = await caches.open(CACHE);
 		await cache.addAll(ASSETS);
