@@ -5,6 +5,7 @@
 
 	export let selected: Category[] = [];
 	export let direction: 'up' | 'down' = 'up';
+	export let withCreation = false;
 
 	let search = '';
 	let isSelectOpen = false;
@@ -75,7 +76,7 @@
 			<div class="filter">
 				<input bind:value={search} placeholder="Поиск" />
 			</div>
-			{#if filteredCategories.length === 0}
+			{#if filteredCategories.length === 0 && withCreation}
 				<button class="create" on:click={handleCategoryAdd}>Создать</button>
 			{/if}
 		</div>
@@ -118,11 +119,19 @@
 
 		background: white;
 
+		display: grid;
+
 		&.down {
 			bottom: unset;
 			top: 100%;
 			border-top: none;
 			border-bottom: 1px solid black;
+
+			.filter {
+				grid-row: 1;
+				border-top: none;
+				border-bottom: 1px solid black;
+			}
 		}
 
 		.list {

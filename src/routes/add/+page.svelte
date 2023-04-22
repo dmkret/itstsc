@@ -35,7 +35,7 @@
 
 <form>
 	<input type="date" bind:value={date} />
-	<Categories bind:selected={categories} />
+	<Categories bind:selected={categories} withCreation />
 	<input bind:value={title} placeholder="Название" />
 	<input bind:value placeholder="Сумма" />
 	<button on:click={handleAdd}>+</button>
