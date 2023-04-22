@@ -1,6 +1,6 @@
 import { categories, costs } from './stores';
 
-const DB_NAME = 'databasev2';
+const DB_NAME = 'databasev3';
 const COSTS_STORE_NAME = 'costs';
 const CATEGORIES_STORE_NAME = 'categories';
 const DATE_INDEX = 'date_idx';
@@ -26,7 +26,7 @@ class Database {
 		if (this.db) return;
 
 		await new Promise<IDBDatabase>((resolve, reject) => {
-			const request = indexedDB.open(DB_NAME, 1);
+			const request = indexedDB.open(DB_NAME, 2);
 			request.addEventListener('success', () => {
 				this.db = request.result;
 				resolve(this.db);
@@ -44,22 +44,25 @@ class Database {
 			request.addEventListener('upgradeneeded', (event) => {
 				this.db = request.result;
 
-				if (event.oldVersion < 1) {
-					const storeObject = this.db.createObjectStore(COSTS_STORE_NAME, {
-						keyPath: 'id',
-						autoIncrement: true,
-					});
-					storeObject.createIndex(DATE_INDEX, 'createdAt');
+				switch (event.oldVersion) {
+					case 1: {
+						const storeObject = this.db.createObjectStore(COSTS_STORE_NAME, {
+							keyPath: 'id',
+							autoIncrement: true,
+						});
+						storeObject.createIndex(DATE_INDEX, 'createdAt');
+						break;
+					}
+					case 2: {
+						const storeObject = this.db.createObjectStore(CATEGORIES_STORE_NAME, {
+							keyPath: 'id',
+							autoIncrement: true,
+						});
+						storeObject.createIndex(DATE_INDEX, 'createdAt');
+						resolve(this.db);
+						break;
+					}
 				}
-				if (event.oldVersion < 2) {
-					const storeObject = this.db.createObjectStore(CATEGORIES_STORE_NAME, {
-						keyPath: 'id',
-						autoIncrement: true,
-					});
-					storeObject.createIndex(DATE_INDEX, 'createdAt');
-				}
-
-				resolve(this.db);
 			});
 		});
 	}
