@@ -12,10 +12,19 @@
 	let title: string = '';
 
 	async function handleAdd() {
-		if (!date) return;
-		if (!value) return;
-		if (!title) return;
-		if (categories.length === 0) return;
+		if (!date) date = formatDate(now);
+		if (!value) {
+			alert('Заполните сумму расхода');
+			return;
+		}
+		if (!title) {
+			alert('Заполните название');
+			return;
+		}
+		if (categories.length === 0) {
+			alert('Выберите хотя бы одну категорию');
+			return;
+		}
 
 		const floatValue = parseFloat(value);
 		if (Number.isNaN(floatValue)) return;
@@ -29,6 +38,7 @@
 			title,
 			categories: categories.map((c) => c.id),
 		});
+
 		goto(base || '/');
 	}
 </script>
@@ -37,12 +47,12 @@
 	<button>Назад</button>
 </a>
 
-<form>
+<form on:submit|preventDefault={handleAdd}>
 	<input type="date" bind:value={date} />
 	<Categories bind:selected={categories} withCreation />
 	<input bind:value={title} placeholder="Название" />
 	<input bind:value placeholder="Сумма" />
-	<button on:click={handleAdd}>+</button>
+	<button>Добавить</button>
 </form>
 
 <style lang="scss">
