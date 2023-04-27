@@ -70,6 +70,11 @@
 		border: 1px solid black;
 	}
 
+	input {
+		width: 100%;
+		background: white;
+	}
+
 	input:focus-visible {
 		outline: 1px solid blue;
 	}
