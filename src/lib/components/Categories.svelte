@@ -51,7 +51,7 @@
 </script>
 
 <div class="categories" use:clickOutside={handleClose}>
-	<button class="value" on:click={toggleOpen} class:empty={selected.length === 0}>
+	<button type="button" class="value" on:click={toggleOpen} class:empty={selected.length === 0}>
 		{#if selected.length > 0}
 			{selected.map((c) => c.title).join(', ')}
 		{:else}
@@ -64,6 +64,7 @@
 			<div class="list">
 				{#each filteredCategories as category (category)}
 					<button
+						type="button"
 						class="dd-item"
 						class:selected={selected.includes(category)}
 						on:click={() => toggleCategory(category)}
