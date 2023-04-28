@@ -77,7 +77,7 @@
 				<input bind:value={search} placeholder="Поиск" />
 			</div>
 			{#if filteredCategories.length === 0 && withCreation}
-				<button class="create" on:click={handleCategoryAdd}>Создать</button>
+				<button type="button" class="create" on:click={handleCategoryAdd}>Создать</button>
 			{/if}
 		</div>
 	{/if}
